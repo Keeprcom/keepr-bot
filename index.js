@@ -51,7 +51,7 @@ server.route([{
   method: 'POST',
   path: '/webhook',
   handler: (req, reply) => {
-    messaging_events = req.payload.entry[0].messaging;
+    let messaging_events = req.payload.entry[0].messaging;
     for (i = 0; i < messaging_events.length; i++) {
       let event = req.payload.entry[0].messaging[i];
       let sender = event.sender.id;
