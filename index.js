@@ -47,8 +47,7 @@ server.route([{
     }
     return reply('Error, wrong validation token');
   }
-},
-{
+}, {
   method: 'POST',
   path: '/webhook',
   handler: (req, reply) => {
@@ -58,6 +57,7 @@ server.route([{
       let sender = event.sender.id;
       if (event.message && event.message.text) {
         let text = event.message.text;
+        console.log('Got ' + text);
         sendTextMessage(sender, "Text received, echo: "+ text.substring(0, 200));
       }
     }
