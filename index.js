@@ -5,6 +5,29 @@ const Hapi = require('hapi');
 const server = new Hapi.Server();
 const port = process.env.PORT || 3000;
 const verifyToken = process.env.VERIFY_TOKEN || '';
+const token = process.env.PAGE_TOKEN || '';
+
+function sendTextMessage(sender, text) {
+  messageData = {
+    text:text
+  }
+  request({
+    url: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token:token},
+    method: 'POST',
+    json: {
+      recipient: {id:sender},
+      message: messageData,
+    }
+  }, function(error, response, body) {
+    if (error) {
+      console.log('Error sending message: ', error);
+    } else if (response.body.error) {
+      console.log('Error: ', response.body.error);
+    }
+  });
+}
+
 server.connection({port: port});
 
 server.start((err) => {
@@ -34,7 +57,7 @@ server.route([{
       let sender = event.sender.id;
       if (event.message && event.message.text) {
         let text = event.message.text;
-        console.log(text);
+        sendTextMessage(sender, "Text received, echo: "+ text.substring(0, 200));
       }
     }
     reply('Accepted').code(200)
