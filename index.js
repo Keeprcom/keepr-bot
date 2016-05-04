@@ -1,6 +1,7 @@
 'use strict';
 
 const Hapi = require('hapi');
+const request = require('request');
 
 const server = new Hapi.Server();
 const port = process.env.PORT || 3000;
@@ -8,7 +9,7 @@ const verifyToken = process.env.VERIFY_TOKEN || '';
 const token = process.env.PAGE_TOKEN || '';
 
 function sendTextMessage(sender, text) {
-  messageData = {
+  let messageData = {
     text:text
   }
   request({
@@ -19,7 +20,7 @@ function sendTextMessage(sender, text) {
       recipient: {id:sender},
       message: messageData,
     }
-  }, function(error, response, body) {
+  }, (error, response, body) => {
     if (error) {
       console.log('Error sending message: ', error);
     } else if (response.body.error) {
