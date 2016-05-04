@@ -1,0 +1,19 @@
+{
+  "name": "keepr-bot",
+  "version": "1.0.0",
+  "description": "Keepr Bot to get the fastest breaking news",
+  "main": "index.js",
+  "scripts": {
+    "start": ". .bash; node index.js",
+    "test": "npm test"
+  },
+  "keywords": [
+    "bot",
+    "facebook"
+  ],
+  "author": "Noppanit Charssinvichai",
+  "license": "ISC",
+  "dependencies": {
+    "hapi": "^13.3.0"
+  }
+}
