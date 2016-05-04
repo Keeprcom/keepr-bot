@@ -17,10 +17,10 @@ server.start((err) => {
 server.route({
   method: 'GET',
   path: '/webhook',
-  handler: function (request, reply) {
+  handler: function (req, reply) {
     if (req.query['hub.verify_token'] === verifyToken) {
-      res.send(req.query['hub.challenge']);
+      reply(req.query['hub.challenge']);
     }
-    res.send('Error, wrong validation token');
+    reply('Error, wrong validation token');
   }
 });
