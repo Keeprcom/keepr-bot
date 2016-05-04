@@ -52,7 +52,7 @@ server.route([{
   path: '/webhook',
   handler: (req, reply) => {
     let messaging_events = req.payload.entry[0].messaging;
-    for (i = 0; i < messaging_events.length; i++) {
+    for (let i = 0; i < messaging_events.length; i++) {
       let event = req.payload.entry[0].messaging[i];
       let sender = event.sender.id;
       if (event.message && event.message.text) {
