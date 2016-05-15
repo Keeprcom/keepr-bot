@@ -121,7 +121,9 @@ server.route([{
   method: 'POST',
   path: '/webhook',
   handler: (req, reply) => {
-    const messaging = getFirstMessagingEntry(req.body); 
+    console.log('Get new message');
+    const messaging = getFirstMessagingEntry(req.payload); 
+    console.log(messaging);
     const msg = messaging.message.text;
     const sender = messaging.sender.id;
     const sessionId = findOrCreateSession(sender);
