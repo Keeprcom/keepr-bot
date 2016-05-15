@@ -128,7 +128,7 @@ server.route([{
     const sender = messaging.sender.id;
     const sessionId = findOrCreateSession(sender);
 
-    wit.runActions(sessionId, msg, sessions[sessionId].context,
+    witClient.runActions(sessionId, msg, sessions[sessionId].context,
       (error, context) => {
         if (error) {
           console.log(error);
