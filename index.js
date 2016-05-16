@@ -6,6 +6,7 @@ const request = require('request');
 
 const config = require('./config');
 const witService = require('./app/services/wit');
+const keepr = require('./app/services/keepr');
 
 const server = new Hapi.Server();
 const port = process.env.PORT || 3000;
@@ -64,8 +65,12 @@ const actions = {
     const recipientId = sessions[sessionId].fbid;
     console.log(recipientId);
     if (recipientId) {
-      sendTextMessage(recipientId, 'This is the response from our Bot!');
-      cb(context);
+
+      keepr.latestNews().then((response) => {
+        const firstBreakingNews = response.numbers[0].text;
+        sendTextMessage(recipientId, firstBreakingNews);
+        cb(context);
+      });
     }
     console.log('No recipientId');
     cb(context);
