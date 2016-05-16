@@ -61,6 +61,13 @@ const actions = {
   },
   ['fetch_latest_news'](sessionId, context, cb) {
     console.log('executing fetch_latest_news');
+    const recipientId = sessions[sessionId].fbid;
+    console.log(recipientId);
+    if (recipientId) {
+      sendTextMessage(recipientId, 'This is the response from our Bot!');
+      cb(context);
+    }
+    console.log('No recipientId');
     cb(context);
   }
   // You should implement your custom actions here
