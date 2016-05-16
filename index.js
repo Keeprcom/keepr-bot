@@ -59,6 +59,10 @@ const actions = {
   error(sessionId, context, error) {
     console.log(error.message);
   },
+  ['fetch_latest_news'](sessionId, context, cb) => {
+    console.log('executing fetch_latest_news');
+    cb(context);
+  }
   // You should implement your custom actions here
   // See https://wit.ai/docs/quickstart
 };
