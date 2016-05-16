@@ -59,7 +59,7 @@ const actions = {
   error(sessionId, context, error) {
     console.log(error.message);
   },
-  ['fetch_latest_news'](sessionId, context, cb) => {
+  ['fetch_latest_news'](sessionId, context, cb) {
     console.log('executing fetch_latest_news');
     cb(context);
   }
