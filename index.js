@@ -134,8 +134,8 @@ server.route([{
   handler: (req, reply) => {
     console.log('Get new message');
     const messaging = getFirstMessagingEntry(req.payload); 
-    if (messaging && messaging.message && messaging.recipient.id === config.Facebook.FB_PAGE_ID) {
-      console.log(messaging);
+    console.log(messaging);
+    if (messaging && messaging.message) {
       const msg = messaging.message.text;
       const sender = messaging.sender.id;
       const sessionId = findOrCreateSession(sender);
@@ -148,18 +148,6 @@ server.route([{
 
             sessions[sessionId].context = context;
           });
-      /*
-         let messaging_events = req.payload.entry[0].messaging;
-         for (let i = 0; i < messaging_events.length; i++) {
-         let event = req.payload.entry[0].messaging[i];
-         let sender = event.sender.id;
-         if (event.message && event.message.text) {
-         let text = event.message.text;
-         console.log('Got ' + text);
-         sendTextMessage(sender, "Text received, echo: "+ text.substring(0, 200));
-         }
-         }
-         */
     }
     reply('Accepted').code(200)
   }
