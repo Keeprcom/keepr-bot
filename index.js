@@ -55,10 +55,16 @@ const actions = {
     }
   },
   merge(sessionId, context, entities, message, cb) {
+    console.log('entities');
+    console.log(entities);
     cb(context);
   },
   error(sessionId, context, error) {
     console.log(error.message);
+  },
+  ['fetch_latest_news_by_keyword'](sessionId, context, cb) {
+    console.log('fetching latest news by keyword');
+    console.log(context);
   },
   ['fetch_latest_news'](sessionId, context, cb) {
     console.log('executing fetch_latest_news');
