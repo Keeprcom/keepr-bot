@@ -46,7 +46,7 @@ const actions = {
       // Let's forward our bot response to her.
         // Let's give the wheel back to our bot
         //
-        sendTextMessage(recipientId, 'This is the response from our Bot!');
+        sendTextMessage(recipientId, 'Fetching...!');
         cb();
     } else {
       console.log('Oops! Couldn\'t find user for session:', sessionId);
@@ -69,6 +69,7 @@ const actions = {
   ['fetch_latest_news_by_keyword'](sessionId, context, cb) {
     console.log('fetching latest news by keyword');
     console.log(context);
+    cb(context);
   },
   ['fetch_latest_news'](sessionId, context, cb) {
     console.log('executing fetch_latest_news');
