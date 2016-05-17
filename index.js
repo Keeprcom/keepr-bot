@@ -46,7 +46,7 @@ const actions = {
       // Let's forward our bot response to her.
         // Let's give the wheel back to our bot
         //
-        sendTextMessage(recipientId, 'Fetching...!');
+        sendTextMessage(recipientId, message);
         cb();
     } else {
       console.log('Oops! Couldn\'t find user for session:', sessionId);
@@ -57,7 +57,7 @@ const actions = {
   merge(sessionId, context, entities, message, cb) {
     console.log('entities');
     console.log(entities);
-    let keyword = entities.keyword.value;
+    let keyword = entities.keyword[0].value;
     if (keyword) {
       context.keyword = keyword;
     }
@@ -69,6 +69,17 @@ const actions = {
   ['fetch_latest_news_by_keyword'](sessionId, context, cb) {
     console.log('fetching latest news by keyword');
     console.log(context);
+    const recipientId = sessions[sessionId].fbid;
+    if (recipientId) {
+
+      /*
+      keepr.latestNewsByKeyword().then((response) => {
+        const firstBreakingNews = response.numbers[0].text;
+        sendTextMessage(recipientId, firstBreakingNews);
+        cb(context);
+      });
+      */
+    }
     cb(context);
   },
   ['fetch_latest_news'](sessionId, context, cb) {

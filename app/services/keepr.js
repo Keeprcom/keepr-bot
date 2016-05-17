@@ -10,5 +10,14 @@ module.exports = {
     };
 
     return request(options);
+  },
+
+  latestNewsByKeyword: (keyword) => {
+    const options = {
+      uri: `http://keepr.herokuapp.com/ask/${keyword}`,
+      json: true
+    };
+
+    return request(options);
   }
 };
