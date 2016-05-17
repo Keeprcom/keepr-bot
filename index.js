@@ -57,6 +57,10 @@ const actions = {
   merge(sessionId, context, entities, message, cb) {
     console.log('entities');
     console.log(entities);
+    let keyword = entities.keyword.value;
+    if (keyword) {
+      context.keyword = keyword;
+    }
     cb(context);
   },
   error(sessionId, context, error) {
