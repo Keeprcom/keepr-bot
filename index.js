@@ -55,8 +55,8 @@ const actions = {
     }
   },
   merge(sessionId, context, entities, message, cb) {
-    console.log('entities');
     console.log(entities);
+    console.log(context);
     let keyword = entities.keyword[0].value;
     if (keyword) {
       context.keyword = keyword;
@@ -75,10 +75,10 @@ const actions = {
       keepr.latestNewsByKeyword(context.keyword).then((response) => {
         const firstBreakingNews = response.numbers[0].text;
         sendTextMessage(recipientId, firstBreakingNews);
-        cb(context);
+        return cb(context);
       });
     }
-    cb(context);
+    return cb(context);
   },
   ['fetch_latest_news'](sessionId, context, cb) {
     console.log('executing fetch_latest_news');
