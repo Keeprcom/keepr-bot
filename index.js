@@ -72,13 +72,11 @@ const actions = {
     const recipientId = sessions[sessionId].fbid;
     if (recipientId) {
 
-      /*
-      keepr.latestNewsByKeyword().then((response) => {
+      keepr.latestNewsByKeyword(context.keyword).then((response) => {
         const firstBreakingNews = response.numbers[0].text;
         sendTextMessage(recipientId, firstBreakingNews);
         cb(context);
       });
-      */
     }
     cb(context);
   },
