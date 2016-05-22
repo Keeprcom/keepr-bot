@@ -49,6 +49,8 @@ const actions = {
         //
         Facebook.sendTextMessage(recipientId, message).then(() => {
           cb();
+        }).catch(() => {
+          cb();
         });
     } else {
       console.log('Oops! Couldn\'t find user for session:', sessionId);
