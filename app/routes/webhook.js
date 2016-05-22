@@ -1,6 +1,8 @@
 'use strict';
 
 const config = require('../../config');
+const Facebook = require('../../app/services/facebook');
+const sessions = require('../../app/services/sessions');
 
 module.exports = {
   get: (req, reply) => {
@@ -8,5 +10,27 @@ module.exports = {
       return reply(req.query['hub.challenge']);
     }
     return reply('Error, wrong validation token');
+  },
+  post: (req, reply) => {
+    const witClient = req.server.plugins['keepr-bot'].witClient;
+    const messaging = Facebook.getFirstMessagingEntry(req.payload); 
+
+    console.log(messaging);
+
+    if (messaging && messaging.message) {
+      const msg = messaging.message.text;
+      const sender = messaging.sender.id;
+      const sessionId = sessions.findOrCreateSession(sender);
+
+      witClient.runActions(sessionId, msg, sessions.getSessions()[sessionId].context,
+        (error, context) => {
+          if (error) {
+            console.log(error);
+          }
+
+          sessions.getSessions()[sessionId].context = context;
+        });
+    }
+    reply('Accepted').code(200)
   }
 };

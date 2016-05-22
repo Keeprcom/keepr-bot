@@ -77,15 +77,7 @@ const actions = {
   }
 };
 
-const witClient = new Wit(config.Wit.serverToken, actions);
 server.connection({port: config.server.port});
-
-server.start((err) => {
-  if (err) {
-    throw err;
-  }
-  console.log('Server running at:', server.info.uri);
-});
 
 server.route([{
   method: 'GET',
@@ -94,24 +86,18 @@ server.route([{
 }, {
   method: 'POST',
   path: '/webhook',
-  handler: (req, reply) => {
-    const messaging = Facebook.getFirstMessagingEntry(req.payload); 
-    if (messaging && messaging.message) {
-      const msg = messaging.message.text;
-      const sender = messaging.sender.id;
-      const sessionId = sessions.findOrCreateSession(sender);
-
-      witClient.runActions(sessionId, msg, sessions.getSessions()[sessionId].context,
-          (error, context) => {
-            if (error) {
-              console.log(error);
-            }
-
-            sessions.getSessions()[sessionId].context = context;
-          });
-    }
-    reply('Accepted').code(200)
-  }
+  handler: routes.webhook.post
 }
 ]);
 
+server.register([require('./plugins/wit')], (err) => {
+  if (err) {
+    throw err;
+  }
+
+  if(!module.parent) {
+    server.start(() => {
+      console.log('Server running at:', server.info.uri);
+    });
+  }
+});
