@@ -6,11 +6,10 @@ const request = require('request');
 
 const config = require('./config');
 const witService = require('./app/services/wit');
+const routes = require('./app/routes');
 const keepr = require('./app/services/keepr');
 
 const server = new Hapi.Server();
-const port = process.env.PORT || 3000;
-const verifyToken = process.env.VERIFY_TOKEN || '';
 const token = process.env.PAGE_TOKEN || '';
 
 
@@ -61,7 +60,7 @@ const actions = {
     if (keyword) {
       context.keyword = keyword;
     }
-    cb(context);
+    return cb(context);
   },
   error(sessionId, context, error) {
     console.log(error.message);
@@ -101,7 +100,7 @@ const actions = {
 
 
 const witClient = new Wit(config.Wit.serverToken, actions);
-server.connection({port: port});
+server.connection({port: config.server.port});
 
 server.start((err) => {
   if (err) {
@@ -147,12 +146,7 @@ const getFirstMessagingEntry = (body) => {
 server.route([{
   method: 'GET',
   path: '/webhook',
-  handler: (req, reply) => {
-    if (req.query['hub.verify_token'] === verifyToken) {
-      return reply(req.query['hub.challenge']);
-    }
-    return reply('Error, wrong validation token');
-  }
+  handler: routes.webhook.get
 }, {
   method: 'POST',
   path: '/webhook',
