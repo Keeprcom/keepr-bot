@@ -12,29 +12,6 @@ const Facebook = require('./app/services/facebook');
 const routes = require('./app/routes');
 
 const server = new Hapi.Server();
-const token = process.env.PAGE_TOKEN || '';
-
-
-function sendTextMessage(sender, text) {
-  let messageData = {
-    text:text
-  }
-  request({
-    url: 'https://graph.facebook.com/v2.6/me/messages',
-    qs: {access_token:token},
-    method: 'POST',
-    json: {
-      recipient: {id:sender},
-      message: messageData,
-    }
-  }, (error, response, body) => {
-    if (error) {
-      console.log('Error sending message: ', error);
-    } else if (response.body.error) {
-      console.log('Error: ', response.body.error);
-    }
-  });
-}
 
 // Our bot actions
 const actions = {
@@ -78,8 +55,11 @@ const actions = {
 
       keepr.latestNewsByKeyword(context.keyword).then((response) => {
         const firstBreakingNews = response.numbers[0].text;
-        sendTextMessage(recipientId, firstBreakingNews);
-        return cb(context);
+        Facebook.sendTextMessage(recipientId, firstBreakingNews).then(() => {
+          cb(context);
+        }).catch(() => {
+          cb(context);
+        });
       });
     }
     return cb(context);
@@ -92,8 +72,11 @@ const actions = {
 
       keepr.latestNews().then((response) => {
         const firstBreakingNews = response.numbers[0].text;
-        sendTextMessage(recipientId, firstBreakingNews);
-        cb(context);
+        Facebook.sendTextMessage(recipientId, firstBreakingNews).then(() => {
+          cb(context);
+        }).catch(() => {
+          cb(context);
+        });
       });
     }
     console.log('No recipientId');
