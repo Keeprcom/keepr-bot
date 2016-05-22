@@ -16,7 +16,8 @@ module.exports = {
       body: {
         recipient: {id: sender},
         message: messageData,
-      }
+      },
+      json: true
     });
   }
 };
