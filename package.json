@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": ". .bash; node index.js",
+    "start-wit": ". .bash; node witInteractive.js",
     "test": "npm test"
   },
   "keywords": [

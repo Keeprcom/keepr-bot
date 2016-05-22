@@ -116,21 +116,6 @@ const findOrCreateSession = (fbid) => {
   return sessionId;
 };
 
-const getFirstMessagingEntry = (body) => {
-  const val = body.object == 'page' &&
-    body.entry &&
-    Array.isArray(body.entry) &&
-    body.entry.length > 0 &&
-    body.entry[0] &&
-    body.entry[0].id == config.Facebook.pageId &&
-    body.entry[0].messaging &&
-    Array.isArray(body.entry[0].messaging) &&
-    body.entry[0].messaging.length > 0 &&
-    body.entry[0].messaging[0]
-    ;
-  return val || null;
-};
-
 server.route([{
   method: 'GET',
   path: '/webhook',
@@ -140,7 +125,7 @@ server.route([{
   path: '/webhook',
   handler: (req, reply) => {
     console.log('Get new message');
-    const messaging = getFirstMessagingEntry(req.payload); 
+    const messaging = Facebook.getFirstMessagingEntry(req.payload); 
     console.log(messaging);
     if (messaging && messaging.message) {
       const msg = messaging.message.text;
