@@ -6,8 +6,10 @@ const request = require('request');
 
 const config = require('./config');
 const witService = require('./app/services/wit');
-const routes = require('./app/routes');
 const keepr = require('./app/services/keepr');
+const Facebook = require('./app/services/facebook');
+
+const routes = require('./app/routes');
 
 const server = new Hapi.Server();
 const token = process.env.PAGE_TOKEN || '';
@@ -45,8 +47,9 @@ const actions = {
       // Let's forward our bot response to her.
         // Let's give the wheel back to our bot
         //
-        sendTextMessage(recipientId, message);
-        cb();
+        Facebook.sendTextMessage(recipientId, message).then(() => {
+          cb();
+        });
     } else {
       console.log('Oops! Couldn\'t find user for session:', sessionId);
       // Giving the wheel back to our bot
