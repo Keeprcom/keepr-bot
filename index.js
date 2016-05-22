@@ -8,22 +8,17 @@ const config = require('./config');
 const witService = require('./app/services/wit');
 const keepr = require('./app/services/keepr');
 const Facebook = require('./app/services/facebook');
+const sessions = require('./app/services/sessions');
 
 const routes = require('./app/routes');
 
 const server = new Hapi.Server();
 
-// Our bot actions
 const actions = {
   say(sessionId, context, message, cb) {
-    // Our bot has something to say!
     // Let's retrieve the Facebook user whose session belongs to
-    const recipientId = sessions[sessionId].fbid;
+    const recipientId = sessions.getSessions()[sessionId].fbid;
     if (recipientId) {
-      // Yay, we found our recipient!
-      // Let's forward our bot response to her.
-        // Let's give the wheel back to our bot
-        //
         Facebook.sendTextMessage(recipientId, message).then(() => {
           cb();
         }).catch(() => {
@@ -31,7 +26,6 @@ const actions = {
         });
     } else {
       console.log('Oops! Couldn\'t find user for session:', sessionId);
-      // Giving the wheel back to our bot
       cb();
     }
   },
@@ -50,7 +44,7 @@ const actions = {
   ['fetch_latest_news_by_keyword'](sessionId, context, cb) {
     console.log('fetching latest news by keyword');
     console.log(context);
-    const recipientId = sessions[sessionId].fbid;
+    const recipientId = sessions.getSessions()[sessionId].fbid;
     if (recipientId) {
 
       keepr.latestNewsByKeyword(context.keyword).then((response) => {
@@ -65,8 +59,7 @@ const actions = {
     return cb(context);
   },
   ['fetch_latest_news'](sessionId, context, cb) {
-    console.log('executing fetch_latest_news');
-    const recipientId = sessions[sessionId].fbid;
+    const recipientId = sessions.getSessions()[sessionId].fbid;
     console.log(recipientId);
     if (recipientId) {
 
@@ -82,10 +75,7 @@ const actions = {
     console.log('No recipientId');
     cb(context);
   }
-  // You should implement your custom actions here
-  // See https://wit.ai/docs/quickstart
 };
-
 
 const witClient = new Wit(config.Wit.serverToken, actions);
 server.connection({port: config.server.port});
@@ -97,25 +87,6 @@ server.start((err) => {
   console.log('Server running at:', server.info.uri);
 });
 
-const sessions = {};
-
-const findOrCreateSession = (fbid) => {
-  let sessionId;
-  // Let's see if we already have a session for the user fbid
-  Object.keys(sessions).forEach(k => {
-    if (sessions[k].fbid === fbid) {
-      // Yep, got it!
-      sessionId = k;
-    }
-  });
-  if (!sessionId) {
-    // No session found for user fbid, let's create a new one
-    sessionId = new Date().toISOString();
-    sessions[sessionId] = {fbid: fbid, context: {}};
-  }
-  return sessionId;
-};
-
 server.route([{
   method: 'GET',
   path: '/webhook',
@@ -124,21 +95,19 @@ server.route([{
   method: 'POST',
   path: '/webhook',
   handler: (req, reply) => {
-    console.log('Get new message');
     const messaging = Facebook.getFirstMessagingEntry(req.payload); 
-    console.log(messaging);
     if (messaging && messaging.message) {
       const msg = messaging.message.text;
       const sender = messaging.sender.id;
-      const sessionId = findOrCreateSession(sender);
+      const sessionId = sessions.findOrCreateSession(sender);
 
-      witClient.runActions(sessionId, msg, sessions[sessionId].context,
+      witClient.runActions(sessionId, msg, sessions.getSessions()[sessionId].context,
           (error, context) => {
             if (error) {
               console.log(error);
             }
 
-            sessions[sessionId].context = context;
+            sessions.getSessions()[sessionId].context = context;
           });
     }
     reply('Accepted').code(200)
