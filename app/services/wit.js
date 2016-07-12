@@ -1,5 +1,6 @@
 'use strict';
 
+const _ = require('lodash');
 const Facebook = require('./facebook');
 const sessions = require('./sessions');
 const keepr = require('./keepr');
@@ -54,7 +55,11 @@ module.exports = {
       if (recipientId) {
 
         keepr.latestNews().then((response) => {
-          const firstBreakingNews = response.numbers[0].text;
+          const numbers = response.numbers;
+
+          const tweetsWithUrls = _.filter(numbers, number => number.urls.length > 0);
+          const firstBreakingNews = tweetsWithUrls.urls[0].expanded_url;
+          
           Facebook.sendTextMessage(recipientId, firstBreakingNews).then(() => {
             cb(context);
           }).catch(() => {
