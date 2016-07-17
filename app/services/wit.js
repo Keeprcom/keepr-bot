@@ -27,7 +27,7 @@ module.exports = {
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
 
-        keepr.latestNewsByKeyword(entities.local_search_query).then((response) => {
+        keepr.latestNewsByKeyword(entities.keyword).then((response) => {
           const numbers = response.numbers;
 
           const firstBreakingNews = numbers[1].urls[0].expanded_url;
