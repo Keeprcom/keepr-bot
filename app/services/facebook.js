@@ -3,6 +3,7 @@
 const request = require('request-promise');
 
 const config = require('../../config');
+const scraper = require('./scraper');
 
 module.exports = {
   getFirstMessagingEntry: (body) => {
@@ -20,18 +21,37 @@ module.exports = {
     return val || null;
   },
   sendTextMessage: (sender, text) => {
-    let messageData = {
-      text: text
-    }
-    return request({
-      uri: 'https://graph.facebook.com/v2.6/me/messages',
-      qs: {access_token: config.Facebook.pageToken},
-      method: 'POST',
-      body: {
-        recipient: {id: sender},
-        message: messageData,
-      },
-      json: true
+    const url = text;
+
+    const metadata = scraper(url);
+    return metadata.metadata().then((meta) => {
+      let messageData = {
+        attachment: {
+          type: 'template',
+          payload: {
+            template_type: 'generic',
+            elements: [
+              {
+                title: 'Test',
+                image_url: meta.image,
+                subtitle: 'test',
+                buttons: []
+              }
+            ]
+          }
+        }
+      };
+
+      return request({
+        uri: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: config.Facebook.pageToken},
+        method: 'POST',
+        body: {
+          recipient: {id: sender},
+          message: messageData,
+        },
+        json: true
+      });
     });
   }
 };

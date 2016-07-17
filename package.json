@@ -6,7 +6,7 @@
   "scripts": {
     "start": ". .bash; node index.js",
     "start-wit": ". .bash; node witInteractive.js",
-    "test": "npm test"
+    "test": ". .bash; mocha tests/ --recursive"
   },
   "keywords": [
     "bot",
@@ -15,10 +15,16 @@
   "author": "Noppanit Charssinvichai",
   "license": "ISC",
   "dependencies": {
+    "bluebird": "^3.4.1",
     "hapi": "^13.3.0",
     "lodash": "^4.13.1",
+    "node-metainspector": "^1.3.0",
     "node-wit": "^3.3.0",
     "request": "^2.72.0",
     "request-promise": "^3.0.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.5.3"
   }
 }
