@@ -41,7 +41,7 @@ module.exports = {
         keepr.latestNewsByKeyword(context.keyword).then((response) => {
           const numbers = response.numbers;
 
-          const firstBreakingNews = numbers[3].urls[0].expanded_url;
+          const firstBreakingNews = numbers[1].urls[0].expanded_url;
           
           Facebook.sendTextMessage(recipientId, firstBreakingNews).then(() => {
             cb(context);
