@@ -43,6 +43,8 @@ module.exports = {
 
           const firstBreakingNews = numbers[1].urls[0].expanded_url;
           
+          console.log('Messages');
+          console.log(firstBreakingNews);
           Facebook.sendTextMessage(recipientId, firstBreakingNews).then(() => {
             cb(context);
           }).catch(() => {
