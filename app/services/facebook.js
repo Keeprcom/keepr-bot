@@ -41,7 +41,7 @@ module.exports = {
           }
         }
       };
-
+      console.log(messageData);
       return request({
         uri: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: config.Facebook.pageToken},

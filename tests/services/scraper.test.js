@@ -13,6 +13,14 @@ describe('Scraper', () => {
       expect(meta.image).to.equal('http://i0.wp.com/emtstatic.com/2016/07/rajoysnorlax.jpg?fit=559%2C352');
       done();
     });
+  });
 
+  it('should get image thumbnail from youtube', (done) => {
+    const metadata = scraper('https://youtu.be/TE438jWkcE0');
+
+    metadata.metadata().then((meta) => {
+      expect(meta.image).to.equal('https://i.ytimg.com/vi/TE438jWkcE0/maxresdefault.jpg');
+      done();
+    });
   });
 });
