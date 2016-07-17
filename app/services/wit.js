@@ -20,26 +20,14 @@ module.exports = {
         cb();
       }
     },
-    merge: (sessionId, context, entities, message, cb) => {
-      console.log('Merge method');
-      console.log(entities);
-      console.log(context);
-      let keyword = entities.keyword[0].value;
-      if (keyword) {
-        context.keyword = keyword;
-      }
-      return cb(context);
-    },
-    error: (sessionId, context, err) => {
-      console.log(err.message);
-    },
-    ['fetch_latest_news_by_keyword'](sessionId, context, cb) {
+    ['fetch_latest_news_by_keyword'](sessionId, context, entities, cb) {
       console.log('fetching latest news by keyword');
       console.log(context);
+      console.log(entities);
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
 
-        keepr.latestNewsByKeyword(context.keyword).then((response) => {
+        keepr.latestNewsByKeyword(entities.local_search_query).then((response) => {
           const numbers = response.numbers;
 
           const firstBreakingNews = numbers[1].urls[0].expanded_url;
@@ -55,26 +43,5 @@ module.exports = {
       }
       return cb(context);
     },
-    ['fetch_latest_news'](sessionId, context, cb) {
-      const recipientId = sessions.getSessions()[sessionId].fbid;
-      console.log(recipientId);
-      if (recipientId) {
-
-        keepr.latestNews().then((response) => {
-          const numbers = response.numbers;
-
-          const tweetsWithUrls = _.filter(numbers, number => number.urls.length > 0);
-          const firstBreakingNews = tweetsWithUrls.urls[0].expanded_url;
-          
-          Facebook.sendTextMessage(recipientId, firstBreakingNews).then(() => {
-            cb(context);
-          }).catch(() => {
-            cb(context);
-          });
-        });
-      }
-      console.log('No recipientId');
-      cb(context);
-    }
   }
 };
