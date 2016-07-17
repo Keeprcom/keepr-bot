@@ -21,6 +21,7 @@ module.exports = {
       }
     },
     merge: (sessionId, context, entities, message, cb) => {
+      console.log('Merge method');
       console.log(entities);
       console.log(context);
       let keyword = entities.keyword[0].value;
