@@ -31,7 +31,9 @@ module.exports = {
           const numbers = response.numbers;
           const firstBreakingNews = numbers[1].urls[0].expanded_url;
           
-          return Facebook.sendTextMessage(recipientId, firstBreakingNews);
+          return Facebook.sendTextMessage(recipientId, firstBreakingNews).catch((error) => {
+            console.log(error);
+          });
         });
       }
       return Promise.reject('Oops! Couldn\'t find user for session: ' + sessionId);
