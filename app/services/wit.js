@@ -29,7 +29,11 @@ module.exports = {
       if (recipientId) {
         return keepr.latestNewsByKeyword(entities.keyword).then((response) => {
           const numbers = response.numbers;
-          const firstBreakingNews = numbers[1].urls[0].expanded_url;
+          const newsWithUrls = _.filter(numbers, (tweet) => {
+            return tweet.urls.length > 0;
+          });
+          console.log(newsWithUrls);
+          const firstBreakingNews = newsWithUrls[0].expanded_url;
           
           return Facebook.sendTextMessage(recipientId, firstBreakingNews).catch((error) => {
             console.log(error);
