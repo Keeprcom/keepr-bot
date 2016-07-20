@@ -25,6 +25,8 @@ module.exports = {
       const entities = request.entities;
       const sessionId = request.sessionId;
       const context = require.context;
+      const keyword = entities.local_search_query;
+      console.log(keyword);
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
         return keepr.latestNewsByKeyword(entities.keyword).then((response) => {
