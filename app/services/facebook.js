@@ -35,7 +35,11 @@ module.exports = {
                 title: 'Test',
                 image_url: meta.image,
                 subtitle: 'test',
-                buttons: []
+                buttons: [{
+                  type: 'web_url',
+                  url: url,
+                  title: 'Click here'
+                }]
               }
             ]
           }
