@@ -4,8 +4,8 @@
   "description": "Keepr Bot to get the fastest breaking news",
   "main": "index.js",
   "scripts": {
-    "start": ". .bash; node index.js",
-    "start-wit": ". .bash; node witInteractive.js",
+    "start": ". .bash; node --harmony_destructuring index.js",
+    "start-wit": ". .bash; node --harmony_destructuring witInteractive.js",
     "test": ". .bash; mocha tests/ --recursive"
   },
   "keywords": [
