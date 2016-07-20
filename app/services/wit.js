@@ -25,11 +25,11 @@ module.exports = {
       const entities = request.entities;
       const sessionId = request.sessionId;
       const context = require.context;
-      const keyword = entities.local_search_query;
-      console.log(keyword);
+      const keyword = entities.local_search_query[0].value;
+
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
-        return keepr.latestNewsByKeyword(entities.keyword).then((response) => {
+        return keepr.latestNewsByKeyword(keyword).then((response) => {
           const numbers = response.numbers;
           const newsWithUrls = _.filter(numbers, (tweet) => {
             return tweet.urls.length > 0;
