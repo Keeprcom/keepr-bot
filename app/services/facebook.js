@@ -32,13 +32,13 @@ module.exports = {
             template_type: 'generic',
             elements: [
               {
-                title: 'Test',
+                title: meta.title,
                 image_url: meta.image,
-                subtitle: 'test',
+                subtitle: meta.description,
                 buttons: [{
                   type: 'web_url',
                   url: url,
-                  title: 'Click here'
+                  title: 'View article'
                 }]
               }
             ]
