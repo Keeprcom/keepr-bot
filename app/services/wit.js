@@ -26,6 +26,7 @@ module.exports = {
       const sessionId = request.sessionId;
       const context = require.context;
       const keyword = entities.local_search_query[0].value;
+      console.log('Keyword' + keyword);
 
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
