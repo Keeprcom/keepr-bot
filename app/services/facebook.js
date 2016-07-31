@@ -23,7 +23,8 @@ module.exports = {
   },
   sendTextMessage: (sender, elements) => {
     const urls = elements.map((e) => {
-      const metadata = scraper(e);
+      const url = e.urls[0].expanded_url;
+      const metadata = scraper(url);
       return metadata.metadata().then((meta) => {
         return {
           title: meta.title,
