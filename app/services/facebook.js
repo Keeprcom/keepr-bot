@@ -32,7 +32,7 @@ module.exports = {
           subtitle: meta.description,
           buttons: [{
             type: 'web_url',
-            url: e,
+            url: url,
             title: 'View Article'
           }]
         }
