@@ -19,6 +19,7 @@ module.exports = {
 
     if (messaging && messaging.message) {
       const msg = messaging.message.text;
+      console.log('Message: ' + msg);
       const sender = messaging.sender.id;
       const sessionId = sessions.findOrCreateSession(sender);
 
