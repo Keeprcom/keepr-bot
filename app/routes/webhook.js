@@ -27,6 +27,7 @@ module.exports = {
           if (error) {
             console.log(error);
           }
+          console.log(context);
 
           sessions.getSessions()[sessionId].context = context;
         });
