@@ -34,9 +34,8 @@ module.exports = {
           const newsWithUrls = _.filter(numbers, (tweet) => {
             return tweet.urls.length > 0;
           });
-          const firstBreakingNews = newsWithUrls[0].urls[0].expanded_url;
           
-          return Facebook.sendTextMessage(recipientId, firstBreakingNews).catch((error) => {
+          return Facebook.sendTextMessage(recipientId, newsWithUrls.slice(0, 3)).catch((error) => {
             console.log(error);
           });
         });

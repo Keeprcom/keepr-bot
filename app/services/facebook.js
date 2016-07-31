@@ -1,6 +1,7 @@
 'use strict';
 
 const request = require('request-promise');
+const Promise = require('bluebird');
 
 const config = require('../../config');
 const scraper = require('./scraper');
@@ -20,32 +21,34 @@ module.exports = {
       ;
     return val || null;
   },
-  sendTextMessage: (sender, text) => {
-    const url = text;
+  sendTextMessage: (sender, elements) => {
+    const urls = elements.map((e) => {
+      const metadata = scraper(e);
+      return metadata.metadata().then((meta) => {
+        return {
+          title: meta.title,
+          image_url: meta.image,
+          subtitle: meta.description,
+          buttons: [{
+            type: 'web_url',
+            url: e,
+            title: 'View Article'
+          }]
+        }
+      });
+    });
 
-    const metadata = scraper(url);
-    return metadata.metadata().then((meta) => {
+    return Promise.all(urls).then((values) => {
       let messageData = {
         attachment: {
           type: 'template',
           payload: {
             template_type: 'generic',
-            elements: [
-              {
-                title: meta.title,
-                image_url: meta.image,
-                subtitle: meta.description,
-                buttons: [{
-                  type: 'web_url',
-                  url: url,
-                  title: 'View article'
-                }]
-              }
-            ]
+            elements: values
           }
         }
       };
-      console.log(messageData);
+
       return request({
         uri: 'https://graph.facebook.com/v2.6/me/messages',
         qs: {access_token: config.Facebook.pageToken},
