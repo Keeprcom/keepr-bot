@@ -22,6 +22,7 @@ module.exports = {
     return val || null;
   },
   sendTextMessage: (sender, elements) => {
+    console.log(elements);
     const urls = elements.map((e) => {
       const url = e.urls[0].expanded_url;
       const metadata = scraper(url);
