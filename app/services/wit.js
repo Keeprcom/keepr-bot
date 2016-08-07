@@ -14,9 +14,18 @@ module.exports = {
       const recipientId = sessions.getSessions()[sessionId].fbid;
       console.log('Response from Wit: ' + text);
       if (recipientId) {
-          return Facebook.sendTextMessage(recipientId, text);
+          return Facebook.sendTextMessage(recipientId, text).then(() => null)
+            .catch((err) => {
+              console.error(
+                'Oops! An error occurred while forwarding the response to',
+                recipientId,
+                ':',
+                err.stack || err
+                );
+            });
       } else {
-        return Promise.reject('Oops! Couldn\'t find user for session: ' + sessionId);
+        console.error('Oops! Couldn\'t find user for session:', sessionId);
+        return Promise.resolve();
       }
     },
     ['fetch_latest_news_by_keyword'](request) {
