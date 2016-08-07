@@ -22,16 +22,14 @@ module.exports = {
       console.log('Message: ' + msg);
       const sender = messaging.sender.id;
       const sessionId = sessions.findOrCreateSession(sender);
+      const session = sessions.getSessions()[sessionId];
 
-      witClient.runActions(sessionId, msg, sessions.getSessions()[sessionId].context,
-        (error, context) => {
-          if (error) {
-            console.log(error);
-          }
-          console.log(context);
-
-          sessions.getSessions()[sessionId].context = context;
-        });
+      witClient.runActions(sessionId, msg, session.context).then((context) => {
+        console.log(context);
+        session.context = context;
+      }).catch((err) => {
+        console.log(err);
+      });
     }
     reply('Accepted').code(200)
   }
