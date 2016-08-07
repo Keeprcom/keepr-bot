@@ -56,6 +56,10 @@ module.exports = {
       });
     });
 
+    urls = urls.filter((e) => {
+      return !_.isEmpty(e.image_url);
+    });
+
     return Promise.all(urls).then((values) => {
       let messageData = {
         attachment: {
