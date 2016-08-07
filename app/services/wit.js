@@ -10,13 +10,11 @@ const config = require('../../config');
 
 module.exports = {
   actions: {
-    send: (request, response) => {
-      const sessionId = request.sessionId;
-      const context = request.context;
-      const entities = request.entities;
+    send: ({sessionId}, {text}) => {
       const recipientId = sessions.getSessions()[sessionId].fbid;
+      console.log('Response from Wit: ' + text);
       if (recipientId) {
-          return Facebook.sendTextMessage(recipientId, message);
+          return Facebook.sendTextMessage(recipientId, text);
       } else {
         return Promise.reject('Oops! Couldn\'t find user for session: ' + sessionId);
       }
