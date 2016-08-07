@@ -18,13 +18,14 @@ module.exports = {
     console.log(messaging);
 
     if (messaging && messaging.message) {
-      const msg = messaging.message.text;
-      console.log('Message: ' + msg);
+      const {text, attachments} = messaging.message;
+      console.log('Message is: ' + text);
+
       const sender = messaging.sender.id;
       const sessionId = sessions.findOrCreateSession(sender);
       const session = sessions.getSessions()[sessionId];
 
-      witClient.runActions(sessionId, msg, session.context).then((context) => {
+      witClient.runActions(sessionId, text, session.context).then((context) => {
         console.log(context);
         session.context = context;
       }).catch((err) => {
