@@ -2,6 +2,7 @@
 
 const request = require('request-promise');
 const Promise = require('bluebird');
+const _ = require('lodash');
 
 const config = require('../../config');
 const scraper = require('./scraper');
@@ -23,6 +24,21 @@ module.exports = {
   },
   sendTextMessage: (sender, elements) => {
     console.log(elements);
+    if (_.isString(elements)) {
+      return request({
+        uri: 'https://graph.facebook.com/v2.6/me/messages',
+        qs: {access_token: config.Facebook.pageToken},
+        method: 'POST',
+        body: {
+          recipient: {id: sender},
+          message: {
+            text: elements
+          },
+        },
+        json: true
+      });
+    }
+
     const urls = elements.map((e) => {
       const url = e.urls[0].expanded_url;
       const metadata = scraper(url);
