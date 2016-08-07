@@ -29,7 +29,7 @@ module.exports = {
         console.log(context);
         session.context = context;
       }).catch((err) => {
-        console.log(err);
+        console.error('Oops! Got an error from Wit: ', err.stack || err);
       });
     }
     reply('Accepted').code(200)
