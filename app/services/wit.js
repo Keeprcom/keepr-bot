@@ -28,7 +28,7 @@ module.exports = {
         return Promise.resolve();
       }
     },
-    ['fetch_latest_news_by_keyword'](request) {
+    fetch_by_keyword: (request) {
       const entities = request.entities;
       const sessionId = request.sessionId;
       const context = require.context;
