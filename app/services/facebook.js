@@ -39,7 +39,7 @@ module.exports = {
       });
     }
 
-    const urls = elements.map((e) => {
+    let urls = elements.map((e) => {
       const url = e.urls[0].expanded_url;
       const metadata = scraper(url);
       return metadata.metadata().then((meta) => {
