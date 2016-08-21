@@ -11,7 +11,7 @@ module.exports = (url) => {
       client.on("error", function(err){
         if (err) {
           console.log(err);
-          reject(err);
+          resolve({});
         }
       });
 
