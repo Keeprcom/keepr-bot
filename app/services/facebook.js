@@ -24,15 +24,14 @@ module.exports = {
   },
   sendTextMessage: (sender, elements) => {
     return Promise.all(elements).then((values) => {
-      const urlWithImage = _.omitBy(values, _.isEmpty);
+      const urlWithImage = _.reject(values, _.isEmpty);
 
-      console.log(Array.isArray(urlWithImage));
       const messageData = {
         attachment: {
           type: 'template',
           payload: {
             template_type: 'generic',
-            elements: urlWithImage
+            elements: urlWithImage.slice(0, 3)
           }
         }
       };
