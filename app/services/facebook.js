@@ -33,7 +33,7 @@ module.exports = {
           type: 'template',
           payload: {
             template_type: 'generic',
-            elements: urlWithImage.slice(0, 3)
+            elements: urlWithImage
           }
         }
       };
