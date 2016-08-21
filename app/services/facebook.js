@@ -61,6 +61,8 @@ module.exports = {
     });
 
     return Promise.all(urls).then((values) => {
+      console.log('Sending...');
+      console.log(values);
       let messageData = {
         attachment: {
           type: 'template',
