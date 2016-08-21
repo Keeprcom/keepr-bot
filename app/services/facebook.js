@@ -26,7 +26,7 @@ module.exports = {
     return Promise.all(elements).then((values) => {
       const urlWithImage = _.omitBy(values, _.isEmpty);
 
-      console.log(typeof urlWithImage);
+      console.log(Object.keys(urlWithImage));
       const messageData = {
         attachment: {
           type: 'template',
