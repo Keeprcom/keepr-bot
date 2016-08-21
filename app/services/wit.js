@@ -37,7 +37,7 @@ module.exports = {
 
       console.log(`Keyword: ${keyword}`);
       console.log(`entities: ${JSON.stringify(entities, null, 4)}`);
-      console.log(`context: ${JSON.stringnify(context, null, 4)}`);
+      console.log(`context: ${JSON.stringify(context, null, 4)}`);
 
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
