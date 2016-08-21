@@ -24,10 +24,9 @@ module.exports = {
   },
   sendTextMessage: (sender, elements) => {
     return Promise.all(elements).then((values) => {
-      console.log(values);
       const urlWithImage = _.omitBy(values, _.isEmpty);
-      console.log(urlWithImage);
 
+      console.log(typeof urlWithImage);
       const messageData = {
         attachment: {
           type: 'template',
