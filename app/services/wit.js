@@ -34,7 +34,7 @@ module.exports = {
       const context = require.context;
       console.log(`entities: ${JSON.stringify(entities, null, 4)}`);
       console.log(`context: ${context}`);
-      const keyword = entities.local_search_query[0].value;
+      const keyword = entities.search_query[0].value;
       console.log('Keyword: ' + keyword);
 
       const recipientId = sessions.getSessions()[sessionId].fbid;
