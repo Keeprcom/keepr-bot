@@ -10,6 +10,7 @@ module.exports = (url) => {
     return new Promise((resolve, reject) => {
       client.on("error", function(err){
         if (err) {
+          console.log(err);
           reject(err);
         }
       });
