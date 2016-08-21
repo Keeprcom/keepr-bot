@@ -25,6 +25,9 @@ module.exports = {
       const sessionId = sessions.findOrCreateSession(sender);
       const session = sessions.getSessions()[sessionId];
 
+      console.log(`sender: ${sender}`);
+      console.log(`sessionId: ${sessionId}`);
+
       witClient.runActions(sessionId, text, session.context).then((context) => {
         console.log(context);
         session.context = context;
