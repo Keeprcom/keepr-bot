@@ -7,6 +7,7 @@ const Facebook = require('./facebook');
 const sessions = require('./sessions');
 const keepr = require('./keepr');
 const config = require('../../config');
+const fbFormatter = require('../helpers/facebookFormatter');
 
 module.exports = {
   actions: {
@@ -31,21 +32,19 @@ module.exports = {
     fetch_by_keyword(request) {
       const entities = request.entities;
       const sessionId = request.sessionId;
-      const context = require.context;
+      const context = request.context;
+      const keyword = entities.wikipedia_search_query[0].value;
+
+      console.log(`Keyword: ${keyword}`);
       console.log(`entities: ${JSON.stringify(entities, null, 4)}`);
       console.log(`context: ${context}`);
-      const keyword = entities.wikipedia_search_query[0].value;
-      console.log('Keyword: ' + keyword);
 
       const recipientId = sessions.getSessions()[sessionId].fbid;
       if (recipientId) {
         return keepr.latestNewsByKeyword(keyword).then((response) => {
-          const numbers = response.numbers;
-          const newsWithUrls = _.filter(numbers, (tweet) => {
-            return tweet.urls.length > 0;
-          });
+          const urlsWithAnImage = fbFormatter.formatForFacebook(response);
           
-          return Facebook.sendTextMessage(recipientId, newsWithUrls.slice(0, 3)).catch((error) => {
+          return Facebook.sendTextMessage(recipientId, urlsWithAnImage).catch((error) => {
             console.log(error);
           });
         });

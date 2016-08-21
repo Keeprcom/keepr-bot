@@ -23,54 +23,15 @@ module.exports = {
     return val || null;
   },
   sendTextMessage: (sender, elements) => {
-    console.log(elements);
-    if (_.isString(elements)) {
-      return request({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: config.Facebook.pageToken},
-        method: 'POST',
-        body: {
-          recipient: {id: sender},
-          message: {
-            text: elements
-          },
-        },
-        json: true
-      });
-    }
+    return Promise.all(elements).then((values) => {
+      const urlWithImage = _.omitBy(values, _.isEmpty);
 
-    let urls = elements.map((e) => {
-      const url = e.urls[0].expanded_url;
-      const metadata = scraper(url);
-      return metadata.metadata().then((meta) => {
-        return {
-          title: meta.title,
-          image_url: meta.image,
-          subtitle: meta.description,
-          buttons: [{
-            type: 'web_url',
-            url: url,
-            title: 'View Article'
-          }]
-        }
-      });
-    });
-
-    /*
-    urls = urls.filter((e) => {
-      return !_.isEmpty(e.image_url);
-    });
-    */
-
-    return Promise.all(urls).then((values) => {
-      console.log('Sending...');
-      console.log(values);
-      let messageData = {
+      const messageData = {
         attachment: {
           type: 'template',
           payload: {
             template_type: 'generic',
-            elements: values
+            elements: urlWithImage.slice(0, 3)
           }
         }
       };
