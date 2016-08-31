@@ -43,8 +43,9 @@ module.exports = {
       if (recipientId) {
         return keepr.latestNewsByKeyword(keyword).then((response) => {
           const urlsWithAnImage = fbFormatter.formatForFacebook(response);
+          console.log(urlsWithAnImage);
           
-          return Facebook.sendTextMessage(recipientId, urlsWithAnImage).catch((error) => {
+          return Facebook.sendTextMessage(recipientId, urlsWithAnImage, keyword).catch((error) => {
             console.log(error);
           });
         });

@@ -7,6 +7,21 @@ const _ = require('lodash');
 const config = require('../../config');
 const scraper = require('./scraper');
 
+function sendFBMsg(sender, text) {
+  return request({
+    uri: 'https://graph.facebook.com/v2.6/me/messages',
+    qs: {access_token: config.Facebook.pageToken},
+    method: 'POST',
+    body: {
+      recipient: {id: sender},
+      message: {
+        text: text
+      }
+    },
+    json: true
+  });
+}
+
 module.exports = {
   getFirstMessagingEntry: (body) => {
     const val = body.object == 'page' &&
@@ -22,8 +37,10 @@ module.exports = {
       ;
     return val || null;
   },
-  sendTextMessage: (sender, elements) => {
+  sendFBMsg: sendFBMsg,
+  sendTextMessage: (sender, elements, keyword) => {
     return Promise.all(elements).then((values) => {
+      console.log(values);
       const urlWithImage = _.reject(values, _.isEmpty);
 
       const messageData = {
@@ -36,16 +53,22 @@ module.exports = {
         }
       };
 
-      return request({
-        uri: 'https://graph.facebook.com/v2.6/me/messages',
-        qs: {access_token: config.Facebook.pageToken},
-        method: 'POST',
-        body: {
-          recipient: {id: sender},
-          message: messageData,
-        },
-        json: true
+      const text = `The top news stories about ${keyword} are:`;
+      return sendFBMsg(sender, text).then(() => {
+        return request({
+          uri: 'https://graph.facebook.com/v2.6/me/messages',
+          qs: {access_token: config.Facebook.pageToken},
+          method: 'POST',
+          body: {
+            recipient: {id: sender},
+            message: messageData,
+          },
+          json: true
+        });
       });
+    }).catch((err) => {
+      console.log(err.stack);
+      return sendFBMsg(sender, text);
     });
   }
 };
